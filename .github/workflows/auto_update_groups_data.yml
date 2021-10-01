@@ -30,6 +30,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: |
+          echo 'Set git config user.email...'
+          git config --global user.email "devnull@inventaire.io"
+          echo 'Set git config user.name...'
+          git config --global user.name "Auto-Update groups"
           echo 'Increment patch version number...'
           npm version patch
           echo 'Pushing commits to repo...'
