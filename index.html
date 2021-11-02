@@ -22,6 +22,11 @@
       max-width: 30em;
       margin: 1em 0;
     }
+    .no-js{
+      color: red;
+      padding: 1em;
+      background-color: #ccc;
+    }
   </style>
   <script type="application/javascript" src="./dist/isbn.js"></script>
 </head>
@@ -34,6 +39,9 @@
     ISBN: <input id="isbnInput" type="text" value="9781781682135" />
   </div>
   <pre id="result"></pre>
+  <noscript>
+    <p class="no-js">This demo requires javascript</p>
+  </noscript>
 
   <script type="application/javascript">
     const queryIsbn = new URLSearchParams(window.location.search).get('isbn')
