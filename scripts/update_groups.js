@@ -8,7 +8,7 @@ const fetch = require('node-fetch')
 const { URLSearchParams } = require('url')
 
 const domain = 'https://www.isbn-international.org'
-const url = `${domain}/?q=bl_proxy/GetRangeInformations`
+const url = `${domain}/bl_proxy/GetRangeInformations`
 
 const params = new URLSearchParams({
   format: 1,
@@ -20,7 +20,7 @@ const getFileUrl = async () => {
   const res = await fetch(url, { method: 'POST', body: params })
   const body = await res.json()
   const { filename, value } = body.result
-  return `${domain}/?q=download_range/${value}/${filename}`
+  return `${domain}/download_range/${value}/${filename}`
 }
 
 const getGroups = result => {
