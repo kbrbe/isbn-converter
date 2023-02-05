@@ -76,5 +76,6 @@
     "audit",
     "publisher",
     "checksum"
-  ]
+  ],
+  "types": "isbn.d.ts"
 }
