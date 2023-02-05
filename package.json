@@ -31,10 +31,12 @@
   },
   "files": [
     "isbn.js",
+    "isbn.d.ts",
     "lib",
     "bin",
     "scripts"
   ],
+  "types": "isbn.d.ts",
   "engines": {
     "node": ">= 6.4.0"
   },
@@ -76,6 +78,5 @@
     "audit",
     "publisher",
     "checksum"
-  ],
-  "types": "isbn.d.ts"
+  ]
 }
