@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@v3
-        with
+        with:
           node-version: 'lts/*'
       - run: npm ci --no-audit
       - run: npm test
@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@v3
-        with
+        with:
           node-version: 'lts/*'
       - run: npm ci --no-audit
       - run: npm run update-groups
