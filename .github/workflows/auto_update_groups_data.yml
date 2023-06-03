@@ -10,7 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
+        with
+          node-version: 'lts/*'
       - run: npm ci --no-audit
       - run: npm test
   publish:
@@ -18,7 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
+        with
+          node-version: 'lts/*'
       - run: npm ci --no-audit
       - run: npm run update-groups
       # See https://github.com/marketplace/actions/add-commit
