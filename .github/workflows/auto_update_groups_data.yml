@@ -41,9 +41,9 @@ jobs:
           echo 'Increment patch version number...'
           npm version patch
           echo 'Pushing commits to repo...'
-          git push origin master
+          git push origin main
           echo 'Pushing tags to repo...'
-          git push origin master --tags
+          git push origin main --tags
           echo 'Setup .npmrc...'
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
           echo 'Publish on NPM...'

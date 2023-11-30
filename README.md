@@ -6,7 +6,7 @@ An ISBN JavaScript Library.
 
 Please note that this is a fork of [isbn2](https://www.npmjs.com/package/isbn2), which was a fork of [isbn](https://www.npmjs.com/package/isbn) package which was forked from the original [isbnjs](https://code.google.com/p/isbnjs/) project on Google Code.
 
-[Ranges data](https://github.com/inventaire/isbn3/blob/master/lib/groups.js) are generated from [isbn-international.org](https://www.isbn-international.org) data.
+[Ranges data](https://github.com/inventaire/isbn3/blob/main/lib/groups.js) are generated from [isbn-international.org](https://www.isbn-international.org) data.
 
 Added features compared to `isbn2`:
 * recover common errors:
@@ -308,7 +308,7 @@ Running `npm run benchmark` a few times on some Linux machine with Node.Js `v8.1
 - load module: 4.5ms
 - parse 4960 non-hyphenated ISBNs in around 285ms
 
-The difference is mainly due to the [generation of a map of groups in `isbn3`](https://github.com/inventaire/isbn3/blob/master/lib/get_group.js), which takes more time a initialization but makes groups lookups much faster.
+The difference is mainly due to the [generation of a map of groups in `isbn3`](https://github.com/inventaire/isbn3/blob/main/lib/get_group.js), which takes more time a initialization but makes groups lookups much faster.
 
 ## Development
 
@@ -322,12 +322,12 @@ npm test
 
 ### Update Groups data
 
-[Groups data](https://github.com/inventaire/isbn3/blob/master/lib/groups.js) are fetched from isbn-international.org, and are critical to how this lib parses ISBNs. Unfortunately, those groups aren't fixed once for all, and we need to update those data periodically.
+[Groups data](https://github.com/inventaire/isbn3/blob/main/lib/groups.js) are fetched from isbn-international.org, and are critical to how this lib parses ISBNs. Unfortunately, those groups aren't fixed once for all, and we need to update those data periodically.
 
-Once a month, a [CI job](https://github.com/inventaire/isbn3/blob/master/.github/workflows/auto_update_groups_data.yml) takes care of updating ISBN groups data and publishing a patch version:
+Once a month, a [CI job](https://github.com/inventaire/isbn3/blob/main/.github/workflows/auto_update_groups_data.yml) takes care of updating ISBN groups data and publishing a patch version:
 ![Auto-update groups data](https://github.com/inventaire/isbn3/workflows/Update%20groups%20and%20publish/badge.svg)
 
-To get the latest data, you thus just need to update to the latest version (beware of [breaking changes](https://github.com/inventaire/isbn3/blob/master/CHANGELOG.md) if that makes you switch to a new major version though):
+To get the latest data, you thus just need to update to the latest version (beware of [breaking changes](https://github.com/inventaire/isbn3/blob/main/CHANGELOG.md) if that makes you switch to a new major version though):
 
 ```sh
 npm install isbn3@latest

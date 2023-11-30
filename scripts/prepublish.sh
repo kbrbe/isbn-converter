@@ -2,7 +2,7 @@
 set -eu
 
 # Update the dist branch
-git checkout master
+git checkout main
 git checkout -B dist
 npm run update-dist
 git add --force ./dist
