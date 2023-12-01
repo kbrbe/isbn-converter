@@ -26,7 +26,7 @@ jobs:
       - run: npm ci --no-audit
       - run: npm run update-groups
       # See https://github.com/marketplace/actions/add-commit
-      - uses: EndBug/add-and-commit@v4
+      - uses: EndBug/add-and-commit@v9
         with:
           author_name: Auto-update groups
           author_email: devnull@inventaire.io
