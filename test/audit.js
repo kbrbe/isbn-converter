@@ -46,4 +46,25 @@ describe('audit', () => {
     audit('9791090648525').clues.should.deepEqual(clues)
     audit('979-1090648525').clues.should.deepEqual(clues)
   })
+
+  it('should find truncated 978-prefixed ISBN-13 presented as ISBN-10', () => {
+    const clues = [
+      { message: 'checksum hints that it is an ISBN-13 without its 978 prefix', candidate: '978-3-641-11542-5', isbn13: '9783641115425', groupname: 'German language' }
+    ]
+    audit('3-641-11542-5').clues.should.deepEqual(clues)
+  })
+
+  it('should find truncated 979-prefixed ISBN-13 presented as ISBN-10', () => {
+    const clues = [
+      { message: 'checksum hints that it is an ISBN-13 without its 979 prefix', candidate: '979-10-210-5271-0', isbn13: '9791021052710', groupname: 'France' }
+    ]
+    audit('10-210-5271-0').clues.should.deepEqual(clues)
+  })
+
+  it('should find unproperly 978-prefixed ISBN-10 presented as ISBN-13', () => {
+    const clues = [
+      { message: 'checksum hints that a 978 was added to an ISBN-10 without updating the checksum', candidate: '3-641-11542-6', isbn13: '9783641115425', groupname: 'German language' }
+    ]
+    audit('978-3-641-11542-6').clues.should.deepEqual(clues)
+  })
 })
