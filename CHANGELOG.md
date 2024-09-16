@@ -1,6 +1,9 @@
 # CHANGELOG
 *versions follow [SemVer](http://semver.org)*
 
+## 1.2.0- 2024-09-16
+* [`audit`](https://github.com/inventaire/isbn3#audit): more possibly recoverable cases added
+
 ## 1.1.0- 2020-04-24
 * Add [`audit`](https://github.com/inventaire/isbn3#audit) function and corresponding [`isbn-audit`](https://github.com/inventaire/isbn3#isbn-audit) CLI command
 * Add [`isbn-checksum`](https://github.com/inventaire/isbn3#isbn-checksum) CLI command
