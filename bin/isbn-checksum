@@ -8,7 +8,12 @@ else if (normalized.length === 13) normalized = normalized.substring(0, 12)
 const calculateCheckDigit = require('../lib/calculate_check_digit')
 const parse = require('../lib/parse')
 const checksum = calculateCheckDigit(normalized)
-const { isbn13h } = parse(`${normalized}${checksum}`)
+const isbnData = parse(`${normalized}${checksum}`)
+if (isbnData == null) {
+  process.stderr.write('invalid ISBN despite recalculated checksum\n')
+  process.exit(1)
+}
+const { isbn13h } = isbnData
 
 if (option === 'c') {
   process.stdout.write(checksum)
