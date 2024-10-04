@@ -21,6 +21,7 @@
       padding: 1em;
       max-width: 30em;
       margin: 1em 0;
+      white-space: pre-wrap;
     }
     .no-js{
       color: red;
@@ -38,7 +39,13 @@
   <div class="control">
     ISBN: <input id="isbnInput" type="text" value="9781781682135" />
   </div>
+
+  <sub>result:</sub>
   <pre id="result"></pre>
+
+  <sub>audit:</sub>
+  <pre id="audit"></pre>
+
   <noscript>
     <p class="no-js">This demo requires javascript</p>
   </noscript>
@@ -62,7 +69,8 @@
       lastValue = currentValue
 
       if (currentValue === '') {
-        result.innerHTML = ''
+        result.innerHTML = 'Missing ISBN'
+        audit.innerHTML = 'Missing ISBN'
         return
       }
 
@@ -72,6 +80,8 @@
       } else {
         result.innerHTML = 'invalid ISBN'
       }
+      const isbnAudit = ISBN.audit(currentValue)
+      audit.innerHTML = JSON.stringify(isbnAudit, null, 2)
       updateQueryString(currentValue)
     }
 
