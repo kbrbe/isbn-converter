@@ -19,7 +19,7 @@ Added features compared to `isbn2`:
 
 [![NPM](https://nodei.co/npm/isbn3.png?stars&downloads&downloadRank)](https://npmjs.com/package/isbn3/)
 
-![Auto-update groups data](https://github.com/inventaire/isbn3/workflows/Update%20groups%20and%20publish/badge.svg)
+![Auto-update groups data](https://github.com/inventaire/isbn3/actions/workflows/auto_update_groups_data.yml/badge.svg)
 
 ## Summary
 
