@@ -36,43 +36,45 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
-  function setupISBNConverter(inputId, tableId, buttonId, checkboxId) {
-    const input = document.getElementById(inputId);
-    const table = document.getElementById(tableId);
-    const button = document.getElementById(buttonId);
-    const useDashesCheckbox = document.getElementById(checkboxId);
+function setupISBNConverter({
+  inputId = 'isbnInput',
+  tableId = 'outputTable',
+  buttonId = 'convertBtn',
+  hyphenateCheckboxId = 'hyphenateCheckbox'
+} = {}) {
+  const input = document.getElementById(inputId);
+  const table = document.getElementById(tableId);
+  const tbody = table.querySelector('tbody') || table.appendChild(document.createElement('tbody'));
+  const button = document.getElementById(buttonId);
+  const hyphenateCheckbox = document.getElementById(hyphenateCheckboxId);
 
-    button.addEventListener('click', () => {
-      const tbody = table.querySelector('tbody');
-      tbody.innerHTML = ''; // Clear old output
+  button.addEventListener('click', () => {
+    const lines = input.value.split(/\r?\n/);
+    const useHyphenated = hyphenateCheckbox?.checked;
+    tbody.innerHTML = ''; // Clear previous rows
 
-      const lines = input.value.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-      const useDashes = useDashesCheckbox.checked;
+    lines.forEach(line => {
+      const raw = line.trim();
+      if (!raw) return;
 
-      lines.forEach(line => {
-        const parsed = ISBN.parse(line);
-        let isbn10 = '', isbn13 = '', isValid = 'No', group = '', publisher = '';
+      const parsed = ISBN.parse(raw);
+      const row = document.createElement('tr');
 
-        if (parsed && parsed.isValid) {
-          isValid = 'Yes';
-          isbn10 = useDashes ? parsed.asIsbn10h() : parsed.asIsbn10();
-          isbn13 = useDashes ? parsed.asIsbn13h() : parsed.asIsbn13();
-          group = parsed.groupname || '';
-          publisher = parsed.publisher || '';
-        }
+      const isbn10 = parsed?.isIsbn10 ? (useHyphenated ? parsed.isbn10h : parsed.isbn10) : '';
+      const isbn13 = parsed?.isIsbn13 ? (useHyphenated ? parsed.isbn13h : parsed.isbn13) : '';
+      const isValid = parsed?.isValid ?? false;
+      const group = parsed?.groupname ?? '';
+      const publisher = parsed?.publisher ?? '';
 
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${line}</td>
-          <td>${isbn10 || '–'}</td>
-          <td>${isbn13 || '–'}</td>
-          <td>${isValid}</td>
-          <td>${group || '–'}</td>
-          <td>${publisher || '–'}</td>
-        `;
-        tbody.appendChild(row);
-      });
+      row.innerHTML = `
+        <td>${raw}</td>
+        <td>${isbn10 || '-'}</td>
+        <td>${isbn13 || '-'}</td>
+        <td>${isValid ? '✅' : '❌'}</td>
+        <td>${group || '-'}</td>
+        <td>${publisher || '-'}</td>
+      `;
+      tbody.appendChild(row);
     });
-  }
-
-
+  });
+}
