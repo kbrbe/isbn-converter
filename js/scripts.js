@@ -50,7 +50,7 @@ window.addEventListener('DOMContentLoaded', event => {
       const useDashes = useDashesCheckbox.checked;
 
       lines.forEach(line => {
-        const parsed = isbn.parse(line);
+        const parsed = ISBN.parse(line);
         let isbn10 = '', isbn13 = '', isValid = 'No', group = '', publisher = '';
 
         if (parsed && parsed.isValid) {
