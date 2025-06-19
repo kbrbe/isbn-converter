@@ -1,125 +1,114 @@
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>ISBN Parser</title>
-  <style type="text/css">
-    body{
-      margin: 1rem;
-      font-family: sans-serif;
-    }
-    #title{
-      font-size: x-large;
-      margin: 1rem 0;
-    }
-    #intro{
-      color: #444;
-    }
-    .control{
-      margin: 1rem 0;
-    }
-    pre:not(:empty){
-      background-color: #eee;
-      white-space: pre-wrap;
-    }
-    pre:not(:empty):not(.inline){
-      padding: 1em;
-      max-width: 30em;
-      margin: 1em 0;
-    }
-    .no-js{
-      color: red;
-      padding: 1em;
-      background-color: #ccc;
-    }
-    pre.inline{
-      display: inline;
-      padding: 0.2rem;
-    }
-  </style>
-  <script type="application/javascript" src="./dist/isbn.js"></script>
-</head>
-<body>
-  <div id="title">ISBN Parser</div>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>ISBN converter</title>
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+            <div class="container px-4">
+                <a class="navbar-brand" href="#page-top">ISBN converter</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Header-->
+        <header class="bg-primary bg-gradient text-white">
+            <div class="container px-4 text-center">
+                <h1 class="fw-bolder">ISBN converter</h1>
+                <p class="lead">Quickly convert or check an ISBN10 or ISBN13 online</p>
+                <a class="btn btn-lg btn-light" href="#about">Go to converter!</a>
+            </div>
+        </header>
+        <!-- About section-->
+        <section id="about">
+            <div class="container px-4">
+                <div class="row gx-4 justify-content-center">
+                    <div class="col-lg-8">
+                        <h2>Bulk converter</h2>
+                        <p class="lead">Copy/paste one or more ISBN numbers in the textfield below and click convert!</p>
+                        <!-- Input area -->
+                          <div class="mb-3">
+                            <label for="isbnInput" class="form-label">Enter ISBNs (one per line):</label>
+                            <textarea class="form-control" id="isbnInput" rows="5" placeholder="e.g.\n9780143127796\n0143127799"></textarea>
+                          </div>
 
-  <p id="intro">This is a demo of what the <a href="https://github.com/inventaire/isbnjs">isbn3</a> JS module can deduce from an <a href="https://en.wikipedia.org/wiki/International_Standard_Book_Number">ISBN</a></p>
+                          <!-- Checkbox and button row -->
+                          <div class="mb-3 form-check form-switch">
+                            <input type="checkbox" class="form-check-input" id="useDashes">
+                            <label class="form-check-label" for="useDashes">Use dashes in output</label>
+                          </div>
 
-  <div class="control">
-    ISBN: <input id="isbnInput" type="text" value="9781781682135" />
-  </div>
+                          <div class="mb-4">
+                            <button class="btn btn-primary" id="convertBtn">Convert</button>
+                          </div>
 
-  <strong>
-    <a href="https://github.com/inventaire/isbn3#parse"><pre class="inline">ISBN.parse</pre></a>
-    result:
-  </strong>
-  <pre id="result"></pre>
+                          <!-- Output table -->
+                          <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover align-middle" id="outputTable">
+                              <thead class="table-dark">
+                                <tr>
+                                  <th>Input</th>
+                                  <th>ISBN-10</th>
+                                  <th>ISBN-13</th>
+                                  <th>Valid</th>
+                                  <th>Group</th>
+                                  <th>Publisher</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <!-- Filled by JS -->
+                              </tbody>
+                            </table>
+                          </div>
 
-  <strong>
-    <a href="https://github.com/inventaire/isbn3#audit"><pre class="inline">ISBN.audit</pre></a>
-    result:
-    </strong>
-  <pre id="audit"></pre>
-
-  <noscript>
-    <p class="no-js">This demo requires javascript</p>
-  </noscript>
-
-  <script type="application/javascript">
-    const queryIsbn = new URLSearchParams(window.location.search).get('isbn')
-    const debouncedUpdate = debounce(update, 100)
-
-    if (queryIsbn) isbnInput.value = queryIsbn
-
-    window.addEventListener('load', function () {
-      update()
-      isbnInput.addEventListener('keyup', debouncedUpdate)
-    })
-
-    var lastValue
-
-    function update () {
-      const currentValue = isbnInput.value.trim()
-      if (currentValue === lastValue) return
-      lastValue = currentValue
-
-      if (currentValue === '') {
-        result.innerHTML = 'Missing ISBN'
-        audit.innerHTML = 'Missing ISBN'
-        return
-      }
-
-      const isbnData = ISBN.parse(currentValue)
-      if (isbnData) {
-        result.innerHTML = JSON.stringify(isbnData, null, 2)
-      } else {
-        result.innerHTML = 'invalid ISBN'
-      }
-      const isbnAudit = ISBN.audit(currentValue)
-      audit.innerHTML = JSON.stringify(isbnAudit, null, 2)
-      updateQueryString(currentValue)
-    }
-
-    function updateQueryString (isbn) {
-      window.history.pushState({ isbn }, isbn, `?isbn=${isbn}`)
-    }
-
-    // Restore the ISBN from an History event
-    // cf https://developer.mozilla.org/en-US/docs/Web/API/History_API
-    window.onpopstate = function ({ state }) {
-      const { isbn } = state
-      if (isbn) isbnInput.value = isbn
-    }
-
-    // Inspired by https://gist.github.com/nmsdvid/8807205
-    function debounce(func, wait) {
-      var timeout
-      return function () {
-        clearTimeout(timeout)
-        timeout = setTimeout(() => {
-          timeout = null
-          func.apply(this, arguments)
-        }, wait)
-      }
-    }
-  </script>
-</body>
+                                                 
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Services section-->
+        <section class="bg-light" id="services">
+            <div class="container px-4">
+                <div class="row gx-4 justify-content-center">
+                    <div class="col-lg-8">
+                        <h2>Services we offer</h2>
+                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut optio velit inventore, expedita quo laboriosam possimus ea consequatur vitae, doloribus consequuntur ex. Nemo assumenda laborum vel, labore ut velit dignissimos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Contact section-->
+        <section id="contact">
+            <div class="container px-4">
+                <div class="row gx-4 justify-content-center">
+                    <div class="col-lg-8">
+                        <h2>Contact us</h2>
+                        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero odio fugiat voluptatem dolor, provident officiis, id iusto! Obcaecati incidunt, qui nihil beatae magnam et repudiandae ipsa exercitationem, in, quo totam.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container px-4"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
 </html>
