@@ -60,8 +60,21 @@ function setupISBNConverter({
       const row = document.createElement('tr');
 
       const isValid = parsed?.isValid ?? false;
-      const isbn10 = isValid && parsed.isIsbn10 ? (useHyphenated ? parsed.isbn10h : parsed.isbn10) : '';
-      const isbn13 = isValid && parsed.isIsbn13 ? (useHyphenated ? parsed.isbn13h : parsed.isbn13) : '';
+
+      let isbn10 = '';
+      let isbn13 = '';
+
+      if (isValid) {
+        // Try to get isbn10
+        if (parsed.isIsbn10) {
+          isbn10 = useHyphenated ? parsed.isbn10h : parsed.isbn10;
+          isbn13 = useHyphenated ? parsed.isbn13h : parsed.isbn13; // this will convert to ISBN-13
+        } else if (parsed.isIsbn13) {
+          isbn13 = useHyphenated ? parsed.isbn13h : parsed.isbn13;
+          isbn10 = parsed.isbn10 ? (useHyphenated ? parsed.isbn10h : parsed.isbn10) : ''; // only if convertible
+        }
+      }
+
       const group = isValid ? parsed.groupname ?? '' : '';
       const publisher = isValid ? parsed.publisher ?? '' : '';
 
