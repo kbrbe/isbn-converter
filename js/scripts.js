@@ -52,7 +52,7 @@ function setupISBNConverter(inputId, tableId, hyphenCheckboxId, buttonId) {
     const lines = inputElem.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
     lines.forEach((isbnStr) => {
-      const parsed = isbn.parse(isbnStr);
+      const parsed = ISBN.parse(isbnStr);
       const isValid = parsed?.isValid ?? false;
 
       let isbn10 = '';
