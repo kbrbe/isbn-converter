@@ -36,58 +36,45 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
-function setupISBNConverter(inputId, tableId, hyphenCheckboxId, buttonId) {
-  const inputElem = document.getElementById(inputId);
-  const tableElem = document.getElementById(tableId);
-  const hyphenCheckbox = document.getElementById(hyphenCheckboxId);
-  const convertButton = document.getElementById(buttonId);
+function setupISBNConverter({
+  inputId = 'isbnInput',
+  tableId = 'outputTable',
+  buttonId = 'convertBtn',
+  hyphenateCheckboxId = 'hyphenateCheckbox'
+} = {}) {
+  const input = document.getElementById(inputId);
+  const table = document.getElementById(tableId);
+  const tbody = table.querySelector('tbody') || table.appendChild(document.createElement('tbody'));
+  const button = document.getElementById(buttonId);
+  const hyphenateCheckbox = document.getElementById(hyphenateCheckboxId);
 
-  convertButton.addEventListener('click', () => {
-    // Clear existing rows except header
-    while (tableElem.rows.length > 1) {
-      tableElem.deleteRow(1);
-    }
+  button.addEventListener('click', () => {
+    const lines = input.value.split(/\r?\n/).filter(line => line.trim());
+    const useHyphenated = hyphenateCheckbox?.checked;
+    tbody.innerHTML = ''; // Clear previous rows
 
-    const useHyphenated = hyphenCheckbox?.checked ?? false;
-    const lines = inputElem.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    lines.forEach(line => {
+      const raw = line.trim();
+      const parsed = ISBN.parse(raw); // isbn comes from isbn3 global object
 
-    lines.forEach((isbnStr) => {
-      const parsed = ISBN.parse(isbnStr);
+      const row = document.createElement('tr');
+
       const isValid = parsed?.isValid ?? false;
+      const isbn10 = isValid && parsed.isIsbn10 ? (useHyphenated ? parsed.isbn10h : parsed.isbn10) : '';
+      const isbn13 = isValid && parsed.isIsbn13 ? (useHyphenated ? parsed.isbn13h : parsed.isbn13) : '';
+      const group = isValid ? parsed.groupname ?? '' : '';
+      const publisher = isValid ? parsed.publisher ?? '' : '';
 
-      let isbn10 = '';
-      let isbn13 = '';
-      let group = '';
-      let publisher = '';
+      row.innerHTML = `
+        <td>${raw}</td>
+        <td>${isbn10 || '-'}</td>
+        <td>${isbn13 || '-'}</td>
+        <td class="text-center">${isValid ? '<i class="bi bi-check-circle-fill text-success" title="Valid ISBN"></i>' : '<i class="bi bi-x-circle-fill text-danger" title="Invalid ISBN"></i>'}</td>
+        <td>${group || '-'}</td>
+        <td>${publisher || '-'}</td>
+      `;
 
-      if (isValid) {
-        if (parsed.isIsbn10) {
-          isbn10 = useHyphenated ? parsed.isbn10h : parsed.isbn10;
-          isbn13 = useHyphenated ? parsed.isbn13h : parsed.isbn13;
-        } else if (parsed.isIsbn13) {
-          isbn13 = useHyphenated ? parsed.isbn13h : parsed.isbn13;
-          isbn10 = parsed.isbn10 ? (useHyphenated ? parsed.isbn10h : parsed.isbn10) : '';
-        }
-
-        group = parsed.group ?? '';
-        publisher = parsed.publisher ?? '';
-      }
-
-      const row = tableElem.insertRow(-1);
-
-      row.insertCell().textContent = isbnStr;
-      row.insertCell().textContent = isbn10;
-      row.insertCell().textContent = isbn13;
-
-      const validCell = row.insertCell();
-      if (isValid) {
-        validCell.innerHTML = '<i class="bi bi-check-circle-fill text-success" title="Valid ISBN"></i>';
-      } else {
-        validCell.innerHTML = '<i class="bi bi-x-circle-fill text-danger" title="Invalid ISBN"></i>';
-      }
-
-      row.insertCell().textContent = group;
-      row.insertCell().textContent = publisher;
+      tbody.appendChild(row);
     });
   });
 }
